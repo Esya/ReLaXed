@@ -23,6 +23,7 @@ program
   .option('-t, --temp [location]', 'Directory for temp file')
   .option('--bo, --build-once', 'Build once only, do not watch')
   .option('-l, --locals <json>', 'Json locals for pug rendering')
+  .option('-f, --file <path>', 'Json file for pug rendering')
   .option('--basedir <location>', 'Base directory for absolute paths, e.g. /')
 
   .action(function (inp, out) {
@@ -87,6 +88,18 @@ if (program.locals) {
   } catch (e) {
     console.error(e)
     colors.red('ReLaXed error: Could not parse locals JSON, see above.')
+  }
+}
+
+let file
+if (program.file) {
+  try {
+    filePath = path.resolve(program.file)
+    fileContent = fs.readFileSync(filePath)
+    locals = JSON.parse(fileContent)
+  } catch (e) {
+    console.error(e)
+    colors.red('ReLaXed error: Could not get JSON from file, see above.')
   }
 }
 
